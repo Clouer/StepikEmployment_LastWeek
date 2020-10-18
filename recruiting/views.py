@@ -16,7 +16,7 @@ class VacanciesView(View):
         vacancies = models.Vacancy.objects.all()
         return render(request, 'recruiting/vacancies.html', context={
             'title': 'Вакансии | ',
-            'vacancies_title': 'Все вакансии',
+            'specialty_title': 'Все вакансии',
             'vacancies_count': vacancies.count()
         })
 
