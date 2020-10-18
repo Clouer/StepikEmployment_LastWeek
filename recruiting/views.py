@@ -8,9 +8,7 @@ from recruiting import models
 
 class MainView(View):
     def get(self, request):
-        return render(request, 'recruiting/index.html', context={
-            'title': '',
-        })
+        return render(request, 'recruiting/index.html', context={'title': ''})
 
 
 class VacanciesView(View):
@@ -26,27 +24,24 @@ class VacanciesView(View):
 class VacanciesCatView(View):
     def get(self, request, category):
         try:
-            models.Specialty.objects.get(code=category)
+            specialty = models.Specialty.objects.get(code=category)
         except ObjectDoesNotExist:
             raise Http404
-        specialty = models.Specialty.objects.get(code=category)
         vacancies = models.Vacancy.objects.filter(specialty=specialty)
         return render(request, 'recruiting/vacancies.html', context={
             'title': specialty.title + ' | ',
-            'vacancies_title': specialty.title,
+            'specialty_title': specialty.title,
             'vacancies_count': vacancies.count,
             'vacancies': vacancies
-
         })
 
 
 class CompaniesView(View):
     def get(self, request, company_id):
         try:
-            models.Company.objects.get(id=company_id)
+            company = models.Company.objects.get(id=company_id)
         except ObjectDoesNotExist:
             raise Http404
-        company = models.Company.objects.get(id=company_id)
         return render(request, 'recruiting/company.html', context={
             'title': company.name + ' | ',
             'company_logo': company.logo,
@@ -59,10 +54,9 @@ class CompaniesView(View):
 class VacancyView(View):
     def get(self, request, vacancy_id):
         try:
-            models.Vacancy.objects.get(id=vacancy_id)
+            vacancy = models.Vacancy.objects.get(id=vacancy_id)
         except ObjectDoesNotExist:
             raise Http404
-        vacancy = models.Vacancy.objects.get(id=vacancy_id)
         company = vacancy.company
         return render(request, 'recruiting/vacancy.html', context={
             'title': vacancy.title + ' | ',

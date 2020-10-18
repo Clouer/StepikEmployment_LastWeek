@@ -35,7 +35,7 @@
                 {% for speciality in specialties %}
                 <div class="col-6 col-md-6 col-lg-3">
                     <div class="card pt-4 text-center mb-4">
-                        <img class="mx-auto d-block" src="{{ speciality.picture }}" width="80" height="80" alt="">
+                        <img class="mx-auto d-block" src="/{{ speciality.picture }}" width="80" height="80" alt="">
                         <div class="card-body">
                             <p class="card-text mb-2">{{ speciality.title }}</p>
                             <p class="card-text"><a href={% url "vacancies_cat" category=speciality.code %}>{{ speciality.vacancies.count }} вакансий</a></p>
@@ -55,7 +55,7 @@
                 <div class="col-6 col-md-6 col-lg-3">
                     <div class="card pt-4 text-center mb-4">
                         <a href={% url 'company' company_id=company.id %} style="max-width: 150px;" class="mx-auto d-block">
-                            <img class="mx-auto d-block mw-100" src="{{ company.logo }}" alt="">
+                            <img class="mx-auto d-block mw-100" src="/{{ company.logo }}" alt="">
                         </a>
                         <div class="card-body">
                             <p class="card-text"><a href="{% url 'company' company_id=company.id %}">{{ company.vacancies.count }} вакансий</a></p>
