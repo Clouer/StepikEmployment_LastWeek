@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views import View
 from django.http import Http404
 from django.core.exceptions import ObjectDoesNotExist
@@ -8,13 +8,20 @@ from recruiting import models
 
 class MainView(View):
     def get(self, request):
-        return render(request, 'recruiting/index.html', context={'title': ''})
+        specialties = models.Specialty.objects.all()
+        companies = models.Company.objects.all()
+        return render(request, 'recruiting/index.html', context={
+            'title': '',
+            'specialties': specialties,
+            'companies': companies
+        })
 
 
 class VacanciesView(View):
     def get(self, request):
         vacancies = models.Vacancy.objects.all()
         return render(request, 'recruiting/vacancies.html', context={
+            'vacancies': vacancies,
             'title': 'Вакансии | ',
             'specialty_title': 'Все вакансии',
             'vacancies_count': vacancies.count()
@@ -23,10 +30,7 @@ class VacanciesView(View):
 
 class VacanciesCatView(View):
     def get(self, request, category):
-        try:
-            specialty = models.Specialty.objects.get(code=category)
-        except ObjectDoesNotExist:
-            raise Http404
+        specialty = get_object_or_404(models.Specialty, code=category)
         vacancies = models.Vacancy.objects.filter(specialty=specialty)
         return render(request, 'recruiting/vacancies.html', context={
             'title': specialty.title + ' | ',
@@ -38,10 +42,7 @@ class VacanciesCatView(View):
 
 class CompaniesView(View):
     def get(self, request, company_id):
-        try:
-            company = models.Company.objects.get(id=company_id)
-        except ObjectDoesNotExist:
-            raise Http404
+        company = get_object_or_404(models.Company, id=company_id)
         return render(request, 'recruiting/company.html', context={
             'title': company.name + ' | ',
             'company_logo': company.logo,
@@ -53,10 +54,7 @@ class CompaniesView(View):
 
 class VacancyView(View):
     def get(self, request, vacancy_id):
-        try:
-            vacancy = models.Vacancy.objects.get(id=vacancy_id)
-        except ObjectDoesNotExist:
-            raise Http404
+        vacancy = get_object_or_404(models.Vacancy, id=vacancy_id)
         company = vacancy.company
         return render(request, 'recruiting/vacancy.html', context={
             'title': vacancy.title + ' | ',

@@ -11,7 +11,7 @@
             </div>
             <div class="col-12 col-lg-8">
                 <section class="pl-3">
-                    <a href={% url 'company' company_id=company %}><img src="/{{ company_logo }}" width="130" height="80" alt=""></a>
+                    <a href={% url 'company' company_id=company %}><img src="{{ company_logo.url }}" width="130" height="80" alt=""></a>
                     <div class="d-flex align-items-baseline align-content-baseline">
                         <h1 class="h2 mt-4 font-weight-bold">{{ vacancy_title }}</h1>
                         <p class="m-0 pl-3">{{ vacancy_min }} – {{ vacancy_max }} Р</p>

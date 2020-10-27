@@ -8,7 +8,7 @@
         </div>
         <section>
             <div class="text-center">
-                <img src="/{{ company_logo }}" width="130" height="80" alt="">
+                <img src="{{ company_logo.url }}" width="130" height="80" alt="">
             </div>
             <h1 class="h1 text-center mx-auto mt-0 pt-1" style="font-size: 70px;"><strong>{{ company_name }}</strong></h1>
             <p class="text-center pt-1">Компания, {{ company_vacancies_count }} вакансий</p>
@@ -26,7 +26,7 @@
                                     <p class="text-muted pt-1">{{ vacancy.published_at }}</p>
                                 </div>
                                 <div class="col-12 col-md-4 col-lg-3 d-flex align-items-end">
-                                    <a href={% url 'vacancy' vacancy_id=vacancy.id %}><img src="/{{ vacancy.company.logo }}" width="130" height="80" alt=""></a>
+                                    <a href={% url 'vacancy' vacancy_id=vacancy.id %}><img src="{{ vacancy.company.logo.url }}" width="130" height="80" alt=""></a>
                                 </div>
                             </div>
                         </div>
