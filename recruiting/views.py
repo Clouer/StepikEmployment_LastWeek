@@ -1,9 +1,10 @@
+from django.contrib.auth.views import LoginView
 from django.shortcuts import render, get_object_or_404
 from django.views import View
-from django.http import Http404
-from django.core.exceptions import ObjectDoesNotExist
+from django.views.generic import CreateView
 
 from recruiting import models
+from recruiting.forms import SignUpForm
 
 
 class MainView(View):
@@ -66,3 +67,30 @@ class VacancyView(View):
             'vacancy_description': vacancy.description,
             'company': company.id
         })
+
+
+class VacancySendView(View):
+    pass
+
+
+class MyCompanyView(View):
+    pass
+
+
+class MyCompanyVacanciesView(View):
+    pass
+
+
+class MyCompanyVacancyView(View):
+    pass
+
+
+class MySignupView(CreateView):
+    form_class = SignUpForm
+    success_url = '/login/'
+    template_name = 'recruiting/register.html'
+
+
+class MyLoginView(LoginView):
+    redirect_authenticated_user = True
+    template_name = 'recruiting/login.html'

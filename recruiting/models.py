@@ -11,7 +11,7 @@ class Company(models.Model):
     logo = models.ImageField(upload_to=MEDIA_COMPANY_IMAGE_DIR)
     description = models.CharField(max_length=400)
     employee_count = models.IntegerField()
-    owner = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
+    owner = models.OneToOneField(get_user_model(), on_delete=models.CASCADE, related_name='owns')
 
     def __str__(self):
         return self.name

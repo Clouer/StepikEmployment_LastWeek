@@ -64,6 +64,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'recruiting.context_processors.active_user',
             ],
         },
     },
@@ -126,3 +127,7 @@ MEDIA_ROOT = 'media'
 
 MEDIA_COMPANY_IMAGE_DIR = 'company_images'
 MEDIA_SPECIALITY_IMAGE_DIR = 'speciality_images'
+
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
