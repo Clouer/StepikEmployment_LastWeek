@@ -1,12 +1,14 @@
+from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.views import View
 from django.views.generic import CreateView
 
-from recruiting import models, forms
-from recruiting.forms import SignUpForm, ApplicationResponseForm
-from recruiting.models import ApplicationResponse, Vacancy
+from recruiting import models
+from recruiting.forms import SignUpForm, ApplicationResponseForm, CreateCompanyForm
+from recruiting.models import ApplicationResponse, Vacancy, Company
 
 
 class MainView(View):
@@ -75,7 +77,7 @@ class VacancyView(View):
         form = ApplicationResponseForm(request.POST)
         if form.is_valid():
             cleaned_form = form.cleaned_data
-            application = ApplicationResponse.objects.create(
+            ApplicationResponse.objects.create(
                 written_username=cleaned_form['written_username'],
                 written_phone=cleaned_form['written_phone'],
                 written_cover_letter=cleaned_form['written_cover_letter'],
@@ -92,15 +94,71 @@ class VacancySendView(View):
 
 
 class MyCompanyView(View):
-    pass
+    def get(self, request):
+        company = ''
+        try:
+            request.user.owns
+            template = 'recruiting/company-edit.html'
+            title = 'Моя компания |'
+            company = request.user.owns
+        except User.owns.RelatedObjectDoesNotExist:
+            template = 'recruiting/company-create.html'
+            title = 'Создать карточку компании |'
+        return render(request, template, context={
+            'form': CreateCompanyForm,
+            'title': title,
+            'company': company
+        })
+
+    def post(self, request):
+        form = CreateCompanyForm(request.POST, request.FILES)
+        company = request.user.owns
+        if form.is_valid():
+            cleaned_form = form.cleaned_data
+            company.name = cleaned_form['name']
+            company.location = cleaned_form['location']
+            company.logo = cleaned_form['logo']
+            company.description = cleaned_form['description']
+            company.employee_count = cleaned_form['employee_count']
+            company.save()
+            return redirect(reverse('my_company'))
+        return HttpResponse(form.errors)
+
+
+class CreateCompanyView(View):
+    def get(self, request):
+        return render(request, 'recruiting/company-create-form.html', context={'form': CreateCompanyForm})
+
+    def post(self, request):
+        form = CreateCompanyForm(request.POST, request.FILES)
+        if form.is_valid():
+            cleaned_form = form.cleaned_data
+            Company.objects.create(
+                name=cleaned_form['name'],
+                location=cleaned_form['location'],
+                logo=cleaned_form['logo'],
+                description=cleaned_form['description'],
+                employee_count=cleaned_form['employee_count'],
+                owner=request.user
+            )
+            return redirect(reverse('my_company'))
+        return render(request, 'recruiting/company-create-form.html', context={'form': form})
 
 
 class MyCompanyVacanciesView(View):
-    pass
+    def get(self, request):
+        vacancies = Vacancy.objects.filter(company=request.user.owns)
+        return render(request, 'recruiting/vacancy-list.html', context={
+            'vacancies': vacancies,
+            'title': 'Вакансии компании |'
+        })
 
 
 class MyCompanyVacancyView(View):
     pass
+
+
+# Вакансии компании |
 
 
 class MySignupView(CreateView):

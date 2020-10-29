@@ -13,5 +13,9 @@ urlpatterns = [
     path('companies/<int:company_id>/', views.CompaniesView.as_view(), name='company'),
     path('vacancies/<int:vacancy_id>/', views.VacancyView.as_view(), name='vacancy'),
     path('vacancies/<int:vacancy_id>/send/', views.VacancySendView.as_view(), name='send_vacancy'),
+    path('mycompany/', views.MyCompanyView.as_view(), name='my_company'),
+    path('mycompany/create/', views.CreateCompanyView.as_view(), name='create_company'),
+    path('mycompany/vacancies/', views.MyCompanyVacanciesView.as_view(), name='my_company_vacancies')
+
 
 ]

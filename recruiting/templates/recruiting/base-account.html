@@ -3,10 +3,15 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>{{ title }}Джуманджи</title>
+    <title>{{ title }} Джуманджи</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #F6F2E6;
+        }
+    </style>
 </head>
 
 <body>
@@ -20,39 +25,31 @@
         <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
             <ul class="navbar-nav col-10">
                 <li class="nav-item">
-                    <a class="nav-link" href={% url 'vacancies' %}>Вакансии</a>
+                    <a class="nav-link text-dark" href={% url 'vacancies' %}>Вакансии</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Компании</a>
+                    <a class="nav-link text-dark" href="#">Компании</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">О проекте</a>
+                    <a class="nav-link text-dark" href="#">О проекте</a>
                 </li>
             </ul>
-            {% if user_is_active %}
-                <ul class="navbar-nav col-2 justify-content-end">
-                    <li class="nav-item active">
-                        <div class="btn-group">
-                            <button type="button" class="btn dropdown-toggle font-weight-bold" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                {{ displayed_name }}
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right mt-3">
-                                <a href="#" class="dropdown-item py-2">Профиль</a>
-                                <a href="#" class="dropdown-item py-2">Резюме</a>
-                                <a href={% url 'my_company' %} class="dropdown-item py-2">Компания</a>
-                                <a href={% url 'logout' %} class="dropdown-item py-2">Выйти</a>
-                            </div>
+            <ul class="navbar-nav col-2 justify-content-end">
+                <li class="nav-item active">
+                    <div class="btn-group">
+                        <button type="button" class="btn dropdown-toggle font-weight-bold" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                            {{ displayed_name }}
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right mt-3">
+                            <a href="#" class="dropdown-item py-2">Профиль</a>
+                            <a href="#" class="dropdown-item py-2">Резюме</a>
+                            <a href={% url 'my_company' %} class="dropdown-item py-2">Компания</a>
+                            <a href={% url 'logout' %} class="dropdown-item py-2">Выйти</a>
                         </div>
-                    </li>
-                </ul>
-            {% else %}
-                <ul class="navbar-nav col-2 justify-content-end">
-                    <li class="nav-item active">
-                        <a href="{% url 'login' %}" class="nav-link font-weight-bold">Вход</a>
-                    </li>
-                </ul>
-            {% endif %}
+                    </div>
+                </li>
+            </ul>
         </div>
     </nav>
 </header>

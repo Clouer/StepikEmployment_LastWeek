@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
-from recruiting.models import ApplicationResponse
+from recruiting.models import ApplicationResponse, Company
 
 
 class SignUpForm(UserCreationForm):
@@ -18,3 +18,11 @@ class ApplicationResponseForm(forms.ModelForm):
     class Meta:
         model = ApplicationResponse
         fields = ['written_username', 'written_phone', 'written_cover_letter']
+
+
+class CreateCompanyForm(forms.ModelForm):
+    description = forms.CharField(widget=forms.Textarea)
+
+    class Meta:
+        model = Company
+        fields = ['name', 'location', 'logo', 'description', 'employee_count']
