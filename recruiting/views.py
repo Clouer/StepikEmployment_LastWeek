@@ -1,10 +1,12 @@
 from django.contrib.auth.views import LoginView
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
 from django.views import View
 from django.views.generic import CreateView
 
-from recruiting import models
-from recruiting.forms import SignUpForm
+from recruiting import models, forms
+from recruiting.forms import SignUpForm, ApplicationResponseForm
+from recruiting.models import ApplicationResponse, Vacancy
 
 
 class MainView(View):
@@ -65,12 +67,28 @@ class VacancyView(View):
             'vacancy_max': vacancy.salary_max,
             'vacancy_skills': vacancy.skills,
             'vacancy_description': vacancy.description,
-            'company': company.id
+            'company': company.id,
+            'form': ApplicationResponseForm,
         })
+
+    def post(self, request, vacancy_id):
+        form = ApplicationResponseForm(request.POST)
+        if form.is_valid():
+            cleaned_form = form.cleaned_data
+            application = ApplicationResponse.objects.create(
+                written_username=cleaned_form['written_username'],
+                written_phone=cleaned_form['written_phone'],
+                written_cover_letter=cleaned_form['written_cover_letter'],
+                vacancy=Vacancy.objects.get(id=vacancy_id),
+                user=request.user
+            )
+            return redirect(reverse('send_vacancy', kwargs={'vacancy_id': vacancy_id}))
+        return redirect(reverse('vacancy', kwargs={'vacancy_id': vacancy_id}))
 
 
 class VacancySendView(View):
-    pass
+    def get(self, request, vacancy_id):
+        return render(request, 'recruiting/sent.html', context={'vacancy_id': vacancy_id})
 
 
 class MyCompanyView(View):

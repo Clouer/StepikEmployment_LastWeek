@@ -12,4 +12,6 @@ urlpatterns = [
     path('vacancies/cat/<str:category>/', views.VacanciesCatView.as_view(), name='vacancies_cat'),
     path('companies/<int:company_id>/', views.CompaniesView.as_view(), name='company'),
     path('vacancies/<int:vacancy_id>/', views.VacancyView.as_view(), name='vacancy'),
+    path('vacancies/<int:vacancy_id>/send/', views.VacancySendView.as_view(), name='send_vacancy'),
+
 ]

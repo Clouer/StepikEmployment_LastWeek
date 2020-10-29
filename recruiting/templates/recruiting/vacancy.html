@@ -21,24 +21,35 @@
                     <div style="line-height: 1.8;">
                         {{ vacancy_description }}
                     </div>
-                    <form action="/echo" class="card mt-4 mb-3">
+
+                    {% if user_is_active %}
+                    <form method="post" class="card mt-4 mb-3">
+                        {% csrf_token %}
                         <div class="card-body mx-3">
                             <p class="h5 mt-3 font-weight-normal">Отозваться на вакансию</p>
                             <div class="form-group">
                                 <label class="mb-1 mt-2" for="userName">Вас зовут</label>
-                                <input class="form-control" type="text" placeholder="" id="userName">
+                                <input class="form-control" type="text" placeholder="" id="userName" name={{ form.written_username.html_name }}>
                             </div>
                             <div class="form-group">
                                 <label class="mb-1" for="userPhone">Ваш телефон</label>
-                                <input class="form-control" type="tel" placeholder="" id="userPhone">
+                                <input class="form-control" type="tel" placeholder="" id="userPhone" name={{ form.written_phone.html_name }}>
                             </div>
                             <div class="form-group">
                                 <label class="mb-1" for="userMsg">Сопроводительное письмо</label>
-                                <textarea class="form-control" rows="8" id="userMsg"></textarea>
+                                <textarea class="form-control" rows="8" id="userMsg" name={{ form.written_cover_letter.html_name }}></textarea>
                             </div>
                             <input type="submit" class="btn btn-primary mt-4 mb-2" value="Записаться на пробный урок">
                         </div>
                     </form>
+                    {% else %}
+                        <div class="card-body mx-3">
+                            <br>
+                            <br>
+                            <p class="h5 mt-3 font-weight-normal">Чтобы отозваться на вакансию, <a href={% url 'login' %}>войдите в систему</a> </p>
+                        </div>
+                    {% endif %}
+
                 </section>
             </div>
         </div>
