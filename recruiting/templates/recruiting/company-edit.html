@@ -18,9 +18,16 @@
                         <!-- Tab -->
                         <section class="tab-pane fade show active">
                             <h2 class="h4 pt-2 pb-3">Информация о&nbsp;компании</h2>
-                            <p class="alert alert-info" role="alert">
-                                Информация о компании обновлена
-                            </p>
+
+                                {% if messages %}
+                                    <ul class="messages">
+                                        {% for message in messages %}
+                                                <p class="alert alert-info" role="alert">{{ message }}</p>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+
+
                             <form action="" method="post" enctype="multipart/form-data">
                                 {% csrf_token %}
                                 <div class="row">

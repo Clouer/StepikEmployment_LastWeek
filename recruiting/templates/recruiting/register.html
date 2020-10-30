@@ -16,7 +16,8 @@
             <form class="form-signin pt-5" method="post">
                 {% csrf_token %}
                 <div class="text-center mt-5 b-1">
-                    <h1 class="h3 mb-3 font-weight-normal">Джуманджи</h1>
+                    <a style="text-decoration: none; color: black" href={% url 'main' %}><h1
+                       class="h3 mb-3 font-weight-normal">Джуманджи</h1></a>
                     <p class="h5 font-weight-light">Создайте аккаунт</p>
                 </div>
                 {{ form.username.register }}
@@ -29,7 +30,8 @@
 
                 <div class=" form-label-group">
                     <p class="text-muted">Имя</p>
-                    <input type="text" id="inputName" class="form-control" name={{ form.first_name.html_name }} required>
+                    <input type="text" id="inputName" class="form-control"
+                           name={{ form.first_name.html_name }} required>
                     <label for="inputName"></label>
                 </div>
 
@@ -53,6 +55,12 @@
                            name={{ form.password2.html_name }} required>
                     <label for="inputPassword"></label>
                 </div>
+
+                {% if form.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        Пожалуйста, введите корректные данные
+                    </div>
+                {% endif %}
 
                 <div class="checkbox mb-3"></div>
                 <button class="btn btn-primary btn-lg btn-block" type="submit">Зарегистрироваться</button>

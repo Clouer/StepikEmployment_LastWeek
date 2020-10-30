@@ -1,8 +1,9 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.db.models import TextChoices
 
-from recruiting.models import ApplicationResponse, Company
+from recruiting.models import ApplicationResponse, Company, Vacancy, Specialty
 
 
 class SignUpForm(UserCreationForm):
@@ -26,3 +27,26 @@ class CreateCompanyForm(forms.ModelForm):
     class Meta:
         model = Company
         fields = ['name', 'location', 'logo', 'description', 'employee_count']
+
+
+class UpdateCompanyForm(forms.ModelForm):
+    description = forms.CharField(widget=forms.Textarea)
+    logo = forms.ImageField(required=False)
+
+    class Meta:
+        model = Company
+        fields = ['name', 'location', 'logo', 'description', 'employee_count']
+
+
+class MyCompanyVacancyCreateForm(forms.ModelForm):
+
+    class Meta:
+        model = Vacancy
+        fields = ['title', 'salary_min', 'salary_max', 'skills', 'description', 'specialty']
+
+
+class MyCompanyVacancyUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = Vacancy
+        fields = ['title', 'salary_min', 'salary_max', 'skills', 'description', 'specialty']

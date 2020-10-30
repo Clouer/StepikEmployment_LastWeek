@@ -17,29 +17,40 @@
                     <div class="card-body px-4 pb-4">
                         <section class="tab-pane fade show active">
                             <h2 class="h4 pt-2 pb-3">Вакансии</h2>
-                            <!-- vacancy state 1 -->
-                            {% for vacancy in vacancies %}
 
-                                <div class="card mt-3">
-                                    <div class="card-body px-4">
-                                        <div class="row align-items-center">
-                                            <div class="col-6 col-lg-8">
-                                                <a href={% url 'vacancy' vacancy_id=vacancy.id %} class="mb-1">{{ vacancy.title }}</a>
-                                                <p class="mb-1">
-                                                    <span class="mr-4">{{ vacancy.salary_min }} - {{ vacancy.salary_max }}</span><a
-                                                        href="#" class="text-info">{{ vacancy.applications.count }}
-                                                    отклика</a>
-                                                </p>
-                                            </div>
-                                            <div class="col-6 col-lg-4 text-right">
-                                                <a href="#" class="btn btn-outline-info">Изменить</a>
+                            {% if got_vacancies %}
+                                {% for vacancy in vacancies %}
+                                    <div class="card mt-3">
+                                        <div class="card-body px-4">
+                                            <div class="row align-items-center">
+                                                <div class="col-6 col-lg-8">
+                                                    <a href={% url 'vacancy' vacancy_id=vacancy.id %} class="mb-1">{{ vacancy.title }}</a>
+                                                    <p class="mb-1">
+                                                        <span class="mr-4">{{ vacancy.salary_min }} - {{ vacancy.salary_max }}</span><a
+                                                            href="#" class="text-info">{{ vacancy.applications.count }}
+                                                        отклика</a>
+                                                    </p>
+                                                </div>
+                                                <div class="col-6 col-lg-4 text-right">
+                                                    <a href={% url 'my_company_vacancy' vacancy_id=vacancy.id %} class="btn
+                                                       btn-outline-info">Изменить</a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                {% endfor %}
+                                <br>
+                                <a href={% url 'create_vacancy' %}>
+                                    <button type="button" class="btn btn-info">Создать вакансию</button>
+                                </a>
 
-                            {% endfor %}
-                            <!-- END vacancy state 1 -->
+                            {% else %}
+                                <div class="alert alert-info" role="alert">
+                                    У вас пока нет вакансий, но вы можете создать первую!
+                                </div>
+                                <a href={% url 'create_vacancy' %} class="btn btn-info mb-2">Добавить вакансию</a>
+                            {% endif %}
+
                         </section>
                     </div>
                 </div>

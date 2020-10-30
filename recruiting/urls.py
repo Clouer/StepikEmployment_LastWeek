@@ -15,7 +15,9 @@ urlpatterns = [
     path('vacancies/<int:vacancy_id>/send/', views.VacancySendView.as_view(), name='send_vacancy'),
     path('mycompany/', views.MyCompanyView.as_view(), name='my_company'),
     path('mycompany/create/', views.CreateCompanyView.as_view(), name='create_company'),
-    path('mycompany/vacancies/', views.MyCompanyVacanciesView.as_view(), name='my_company_vacancies')
+    path('mycompany/vacancies/', views.MyCompanyVacanciesView.as_view(), name='my_company_vacancies'),
+    path('mycompany/vacancies/create/', views.CreateVacancyView.as_view(), name='create_vacancy'),
+    path('mycompany/vacancies/<int:vacancy_id>/', views.MyCompanyVacancyView.as_view(), name='my_company_vacancy')
 
 
 ]

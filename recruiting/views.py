@@ -1,3 +1,6 @@
+from datetime import datetime
+
+from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
 from django.http import HttpResponse
@@ -7,7 +10,8 @@ from django.views import View
 from django.views.generic import CreateView
 
 from recruiting import models
-from recruiting.forms import SignUpForm, ApplicationResponseForm, CreateCompanyForm
+from recruiting.forms import SignUpForm, ApplicationResponseForm, CreateCompanyForm, UpdateCompanyForm, \
+    MyCompanyVacancyCreateForm, MyCompanyVacancyUpdateForm
 from recruiting.models import ApplicationResponse, Vacancy, Company
 
 
@@ -105,22 +109,24 @@ class MyCompanyView(View):
             template = 'recruiting/company-create.html'
             title = 'Создать карточку компании |'
         return render(request, template, context={
-            'form': CreateCompanyForm,
+            'form': UpdateCompanyForm,
             'title': title,
             'company': company
         })
 
     def post(self, request):
-        form = CreateCompanyForm(request.POST, request.FILES)
+        form = UpdateCompanyForm(request.POST, request.FILES)
         company = request.user.owns
         if form.is_valid():
             cleaned_form = form.cleaned_data
+            if cleaned_form.get('logo'):
+                company.logo = cleaned_form['logo']
             company.name = cleaned_form['name']
             company.location = cleaned_form['location']
-            company.logo = cleaned_form['logo']
             company.description = cleaned_form['description']
             company.employee_count = cleaned_form['employee_count']
             company.save()
+            messages.info(request, 'Информация о компании обновлена')
             return redirect(reverse('my_company'))
         return HttpResponse(form.errors)
 
@@ -148,17 +154,68 @@ class CreateCompanyView(View):
 class MyCompanyVacanciesView(View):
     def get(self, request):
         vacancies = Vacancy.objects.filter(company=request.user.owns)
+        got_vacancies = False
+        if len(vacancies) > 0:
+            got_vacancies = True
         return render(request, 'recruiting/vacancy-list.html', context={
             'vacancies': vacancies,
-            'title': 'Вакансии компании |'
+            'title': 'Вакансии компании |',
+            'got_vacancies': got_vacancies,
         })
 
 
+class CreateVacancyView(View):
+    def get(self, request):
+        return render(request, 'recruiting/vacancy-create.html', context={'form': MyCompanyVacancyCreateForm})
+
+    def post(self, request):
+        form = MyCompanyVacancyCreateForm(request.POST)
+        if form.is_valid():
+            cleaned_form = form.cleaned_data
+            Vacancy.objects.create(
+                title=cleaned_form['title'],
+                specialty=cleaned_form['specialty'],
+                company=request.user.owns,
+                salary_min=cleaned_form['salary_min'],
+                salary_max=cleaned_form['salary_max'],
+                skills=cleaned_form['skills'],
+                description=cleaned_form['description'],
+                published_at=datetime.today().strftime('%Y-%m-%d')
+            )
+            return redirect(reverse('my_company_vacancies'))
+        return HttpResponse(form.errors)
+        # return render(request, 'recruiting/vacancy-create.html', context={'form': form})
+
+
 class MyCompanyVacancyView(View):
-    pass
+    def get(self, request, vacancy_id):
+        vacancy = Vacancy.objects.get(id=vacancy_id)
+        applications = ApplicationResponse.objects.filter(vacancy=vacancy)
+        return render(request, 'recruiting/vacancy-edit.html', context={
+            'form': MyCompanyVacancyCreateForm,
+            'vacancy': vacancy,
+            'title': 'Вакансии компании |',
+            'applications': applications
+        })
 
-
-# Вакансии компании |
+    def post(self, request, vacancy_id):
+        form = MyCompanyVacancyCreateForm(request.POST)
+        if form.is_valid():
+            cleaned_form = form.cleaned_data
+            vacancy = Vacancy.objects.get(id=vacancy_id)
+            if cleaned_form.get('specialty'):
+                vacancy.specialty = cleaned_form['specialty']
+            vacancy.title = cleaned_form['title']
+            vacancy.salary_min = cleaned_form['salary_min']
+            vacancy.salary_max = cleaned_form['salary_max']
+            vacancy.skills = cleaned_form['skills']
+            vacancy.description = cleaned_form['description']
+            vacancy.save()
+            messages.info(request, 'Вакансия обновлена')
+            return redirect(reverse('my_company_vacancy', kwargs={'vacancy_id': vacancy_id}))
+        return redirect(reverse('my_company_vacancy', kwargs={
+            'vacancy_id': vacancy_id
+        }))
 
 
 class MySignupView(CreateView):
