@@ -1,9 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django.db.models import TextChoices
 
-from recruiting.models import ApplicationResponse, Company, Vacancy, Specialty
+from recruiting.models import ApplicationResponse, Company, Vacancy, Resume
 
 
 class SignUpForm(UserCreationForm):
@@ -39,14 +38,17 @@ class UpdateCompanyForm(forms.ModelForm):
 
 
 class MyCompanyVacancyCreateForm(forms.ModelForm):
-
     class Meta:
         model = Vacancy
         fields = ['title', 'salary_min', 'salary_max', 'skills', 'description', 'specialty']
 
 
-class MyCompanyVacancyUpdateForm(forms.ModelForm):
-
+class CreateResumeForm(forms.ModelForm):
     class Meta:
-        model = Vacancy
-        fields = ['title', 'salary_min', 'salary_max', 'skills', 'description', 'specialty']
+        model = Resume
+        fields = ['first_name', 'last_name', 'status', 'salary', 'specialty', 'grade', 'education', 'experience',
+                  'portfolio']
+
+
+class SearchForm(forms.Form):
+    search_request = forms.CharField(max_length=300)

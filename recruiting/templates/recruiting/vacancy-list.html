@@ -27,7 +27,7 @@
                                                     <a href={% url 'vacancy' vacancy_id=vacancy.id %} class="mb-1">{{ vacancy.title }}</a>
                                                     <p class="mb-1">
                                                         <span class="mr-4">{{ vacancy.salary_min }} - {{ vacancy.salary_max }}</span><a
-                                                            href="#" class="text-info">{{ vacancy.applications.count }}
+                                                            href={% url 'my_company_vacancy' vacancy_id=vacancy.id %} class="text-info">{{ vacancy.applications.count }}
                                                         отклика</a>
                                                     </p>
                                                 </div>

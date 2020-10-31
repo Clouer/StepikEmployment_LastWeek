@@ -17,7 +17,10 @@ urlpatterns = [
     path('mycompany/create/', views.CreateCompanyView.as_view(), name='create_company'),
     path('mycompany/vacancies/', views.MyCompanyVacanciesView.as_view(), name='my_company_vacancies'),
     path('mycompany/vacancies/create/', views.CreateVacancyView.as_view(), name='create_vacancy'),
-    path('mycompany/vacancies/<int:vacancy_id>/', views.MyCompanyVacancyView.as_view(), name='my_company_vacancy')
+    path('mycompany/vacancies/<int:vacancy_id>/', views.MyCompanyVacancyView.as_view(), name='my_company_vacancy'),
+    path('myresume/', views.ResumeView.as_view(), name='my_resume'),
+    path('myresume/create/', views.CreateResumeView.as_view(), name='create_resume'),
+    path('search?s=<str:search_request>/', views.SearchView.as_view(), name='search')
 
 
 ]

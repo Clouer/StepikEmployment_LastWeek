@@ -22,12 +22,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href={% url 'vacancies' %}>Вакансии</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Компании</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">О проекте</a>
-                </li>
             </ul>
             {% if user_is_active %}
                 <ul class="navbar-nav col-2 justify-content-end">
@@ -39,7 +33,7 @@
                             </button>
                             <div class="dropdown-menu dropdown-menu-right mt-3">
                                 <a href="#" class="dropdown-item py-2">Профиль</a>
-                                <a href="#" class="dropdown-item py-2">Резюме</a>
+                                <a href={% url 'my_resume' %} class="dropdown-item py-2">Резюме</a>
                                 <a href={% url 'my_company' %} class="dropdown-item py-2">Компания</a>
                                 <a href={% url 'logout' %} class="dropdown-item py-2">Выйти</a>
                             </div>

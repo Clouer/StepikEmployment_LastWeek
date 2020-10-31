@@ -28,7 +28,7 @@ class Specialty(models.Model):
 
 class Vacancy(models.Model):
     title = models.CharField(max_length=100)
-    specialty = models.ForeignKey(Specialty, on_delete=models.CASCADE, related_name='vacancies')
+    specialty = models.ForeignKey(Specialty, on_delete=models.CASCADE, related_name='vacancies', blank=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='vacancies')
     skills = models.CharField(max_length=150)
     description = models.CharField(max_length=400)
@@ -49,3 +49,28 @@ class ApplicationResponse(models.Model):
 
     def __str__(self):
         return f'Отклик от {self.written_username}'
+
+
+class Resume(models.Model):
+    STATUS_CHOICES = (
+        ('not_looking_for_job', 'Не ищу работу'),
+        ('considering_offers', 'Рассматриваю предложения'),
+        ('looking_for_job', 'Ищу работу')
+    )
+    GRADE_CHOICES = (
+        ('trainee', 'Стажер '),
+        ('junior', 'Джуниор'),
+        ('middle', 'Миддл'),
+        ('senior', 'Синьор'),
+        ('lead', 'Лид')
+    )
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='resume')
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    status = models.CharField(max_length=300, choices=STATUS_CHOICES, blank=True)
+    salary = models.IntegerField()
+    specialty = models.ForeignKey(Specialty, on_delete=models.CASCADE, related_name='resume', blank=True)
+    grade = models.CharField(max_length=300, choices=GRADE_CHOICES, blank=True)
+    education = models.CharField(max_length=500)
+    experience = models.CharField(max_length=500)
+    portfolio = models.URLField(max_length=150, null=True, blank=True)
